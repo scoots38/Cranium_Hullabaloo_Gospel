@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Find Your Math Gaps</title>
+</head>
+<body>
+  <h1>Select the math class you are in</h1>
+  <div id="menu">
+    <button onclick="startTree('geometry')">Geometry</button>
+    <button onclick="startTree('algebra')">Algebra</button>
+  </div>
+
+  <div id="questionBox" style="margin-top:20px;"></div>
+  <script src="algebra_bank.js"></script>
+  <script src="geometry_bank.js"></script>
+  <script>
+    const trees = {
+      geometry: {
+        
+      },
+      algebra: {
+        
+      }
+    };
+
+    let currentTree = null;
+
+    function startTree(treeName) {
+      currentTree = trees[treeName];
+      document.getElementById('menu').style.display = 'none';
+      nextQuestion('q1');
+    }
+
+    function nextQuestion(id) {
+      const container = document.getElementById('questionBox');
+      const q = currentTree[id];
+      if (!q) return;
+      container.innerHTML = `<p>${q.question}</p>` +
+        Object.entries(q.answers).map(
+          ([label, nextId]) =>
+            `<button onclick="${nextId === 'restart' ? 'location.reload()' : `nextQuestion('${nextId}')`}">${label}</button>`
+        ).join('');
+    }
+  </script>
+</body>
+</html>
