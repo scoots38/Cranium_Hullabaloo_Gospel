@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Find Your Math Gaps</title>
+    <title>Random Noises</title>
 </head>
+
 <body>
-  <h1>Select the math class you are in</h1>
-  <div id="menu">
-    <button onclick="startTree('geometry')">Geometry</button>
-    <button onclick="startTree('algebra')">Algebra</button>
-  </div>
 
-  <div id="questionBox" style="margin-top:20px;"></div>
-  <script src="algebra_bank.js"></script>
-  <script src="geometry_bank.js"></script>
-  <script>
-    const trees = {
-      geometry: {
-        
-      },
-      algebra: {
-        
-      }
-    };
+    <button id="playButton">Play</button>
 
-    let currentTree = null;
+    <script>
+        const noises = [
+            "audio/noise1.mp3",
+            "audio/noise2.mp3",
+            "audio/noise3.mp3",
+            "audio/noise4.mp3",
+            "audio/noise5.mp3"
+        ];
 
-    function startTree(treeName) {
-      currentTree = trees[treeName];
-      document.getElementById('menu').style.display = 'none';
-      nextQuestion('q1');
-    }
+        document.getElementById("playButton").addEventListener("click", function() {
 
-    function nextQuestion(id) {
-      const container = document.getElementById('questionBox');
-      const q = currentTree[id];
-      if (!q) return;
-      container.innerHTML = `<p>${q.question}</p>` +
-        Object.entries(q.answers).map(
-          ([label, nextId]) =>
-            `<button onclick="${nextId === 'restart' ? 'location.reload()' : `nextQuestion('${nextId}')`}">${label}</button>`
-        ).join('');
-    }
-  </script>
+            // Make a copy so we can shuffle it
+            let shuffled = [...noises];
+
+            // Shuffle the five noises
+            shuffled.sort(() => Math.random() - 0.5);
+
+            // Play them one after another
+            let index = 0;
+
+            function playNext() {
+                if (index >= shuffled.length) {
+                    return;
+                }
+
+                const audio = new Audio(shuffled[index]);
+                index++;
+
+                audio.addEventListener("ended", playNext);
+                audio.play();
+            }
+
+            playNext();
+        });
+    </script>
+
 </body>
 </html>
